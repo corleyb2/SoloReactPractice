@@ -1,24 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import myDatabase from "./Database.js";
+import ClimbCard from "./components/ClimbCard";
+import ClimbDetails from "./components/ClimbDetails";
 
 function App() {
+  const [currentClimb, setCurrentClimb] = useState("");
+  const [isHomePage, setIsHomePage] = useState(true);
+
+  function updateClimb(details) {
+    setCurrentClimb(details);
+    setIsHomePage(false);
+  }
+
+  if (!isHomePage) {
+    return (
+      <ClimbDetails
+        setIsHomePage={setIsHomePage}
+        currentClimb={currentClimb}
+      ></ClimbDetails>
+    );
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header className="navbar">
+        <h1>Climbing Across the USA</h1>
+        <div className="navbar-links">
+          <p>About This Page</p>
+          <p>Contact Us</p>
+        </div>
       </header>
+      <div className="main-content">
+        {myDatabase.map((climb) => (
+          <ClimbCard climb={climb} updateClimb={updateClimb}></ClimbCard>
+        ))}
+      </div>
     </div>
   );
 }
